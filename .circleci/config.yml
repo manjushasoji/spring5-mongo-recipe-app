@@ -1,4 +1,4 @@
-# Java Maven CircleCI 2.0 configuration file
+# Java Gradle CircleCI 2.0 configuration file
 
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
@@ -39,7 +39,7 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       # run tests! and gen code coverage
-      - run: ./gradlew clean test jacocoTestReport
+      #- run: ./gradlew clean test jacocoTestReport
 
       - run:
           name: Save test results

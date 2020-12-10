@@ -5,7 +5,9 @@ import manj.springframework.domain.*;
 import manj.springframework.repositories.CategoryRepository;
 import manj.springframework.repositories.RecipeRepository;
 import manj.springframework.repositories.UnitOfMeasureRepository;
+import manj.springframework.repositories.reactive.UnitOfMeasureReactiveRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     private final CategoryRepository categoryRepository;
     private final RecipeRepository recipeRepository;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
+    
 
     public RecipeBootstrap(CategoryRepository categoryRepository,
                            RecipeRepository recipeRepository, UnitOfMeasureRepository unitOfMeasureRepository) {
@@ -39,6 +42,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         loadUom();
         recipeRepository.saveAll(getRecipes());
         log.debug("Loading Bootstrap Data");
+        
     }
 
     private void loadCategories(){

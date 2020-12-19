@@ -21,7 +21,7 @@ public class RecipeCommandToRecipeTest {
     public static final String RECIPE_ID = "1";
     public static final Integer COOK_TIME = Integer.valueOf("5");
     public static final Integer PREP_TIME = Integer.valueOf("7");
-    public static final String DESCRIPTION = "My Recipe";
+    public static final String DESCRIPTION = "My ReactiveRecipe";
     public static final String DIRECTIONS = "Directions";
     public static final Difficulty DIFFICULTY = Difficulty.EASY;
     public static final Integer SERVINGS = Integer.valueOf("3");

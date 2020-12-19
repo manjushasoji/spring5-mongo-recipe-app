@@ -53,7 +53,7 @@ public class IngredientServiceImpl implements IngredientService {
 
         if(!ingredientCommandOptional.isPresent()){
             //todo impl error handling
-            log.error("Ingredient id not found: " + ingredientId);
+            log.error("ReactiveIngredient id not found: " + ingredientId);
         }
 
         return ingredientCommandOptional.get();
@@ -67,7 +67,7 @@ public class IngredientServiceImpl implements IngredientService {
         if(!recipeOptional.isPresent()){
 
             //todo toss error if not found!
-            log.error("Recipe not found for id: " + command.getRecipeId());
+            log.error("ReactiveRecipe not found for id: " + command.getRecipeId());
             return new IngredientCommand();
         } else {
             Recipe recipe = recipeOptional.get();
@@ -86,7 +86,7 @@ public class IngredientServiceImpl implements IngredientService {
                         .findById(command.getUom().getId())
                         .orElseThrow(() -> new RuntimeException("UOM NOT FOUND"))); //todo address this
             } else {
-                //add new Ingredient
+                //add new ReactiveIngredient
                 Ingredient ingredient = ingredientCommandToIngredient.convert(command);
               //  ingredient.setRecipe(recipe);
                 recipe.addIngredient(ingredient);
@@ -132,14 +132,14 @@ public class IngredientServiceImpl implements IngredientService {
                     .findFirst();
 
             if(ingredientOptional.isPresent()){
-                log.debug("found Ingredient");
+                log.debug("found ReactiveIngredient");
                 Ingredient ingredientToDelete = ingredientOptional.get();
                // ingredientToDelete.setRecipe(null);
                 recipe.getIngredients().remove(ingredientOptional.get());
                 recipeRepository.save(recipe);
             }
         } else {
-            log.debug("Recipe Id Not found. Id:" + recipeId);
+            log.debug("ReactiveRecipe Id Not found. Id:" + recipeId);
         }
     }
 }

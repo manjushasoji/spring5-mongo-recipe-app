@@ -10,13 +10,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import manj.springframework.commands.IngredientCommand;
 import manj.springframework.commands.RecipeCommand;
-import manj.springframework.controllers.IngredientController;
-import manj.springframework.services.IngredientService;
-import manj.springframework.services.RecipeService;
-import manj.springframework.services.UnitOfMeasureService;
-
-import java.util.HashSet;
-
+import manj.springframework.commands.UnitOfMeasureCommand;
+import manj.springframework.controllers.reactive.IngredientReactiveController;
+import manj.springframework.services.reactive.IngredientReactiveService;
+import manj.springframework.services.reactive.RecipeReactiveService;
+import manj.springframework.services.reactive.UnitOfMeasureReactiveService;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -26,15 +26,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class IngredientControllerTest {
 
     @Mock
-    IngredientService ingredientService;
+    IngredientReactiveService ingredientService;
 
     @Mock
-    UnitOfMeasureService unitOfMeasureService;
+    UnitOfMeasureReactiveService unitOfMeasureService;
 
     @Mock
-    RecipeService recipeService;
+    RecipeReactiveService recipeService;
 
-    IngredientController controller;
+    IngredientReactiveController controller;
 
     MockMvc mockMvc;
 
@@ -42,7 +42,7 @@ public class IngredientControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        controller = new IngredientController(ingredientService, recipeService, unitOfMeasureService);
+        controller = new IngredientReactiveController(ingredientService, recipeService, unitOfMeasureService);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
@@ -50,7 +50,8 @@ public class IngredientControllerTest {
     public void testListIngredients() throws Exception {
         //given
         RecipeCommand recipeCommand = new RecipeCommand();
-        when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(recipeCommand));
+
 
         //when
         mockMvc.perform(get("/recipe/1/ingredients"))
@@ -68,7 +69,8 @@ public class IngredientControllerTest {
         IngredientCommand ingredientCommand = new IngredientCommand();
 
         //when
-        when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(ingredientCommand);
+        when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(Mono.just(ingredientCommand));
+
 
         //then
         mockMvc.perform(get("/recipe/1/ingredient/2/show"))
@@ -84,8 +86,8 @@ public class IngredientControllerTest {
         recipeCommand.setId("1");
 
         //when
-        when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
-        when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(recipeCommand));
+        when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
 
         //then
         mockMvc.perform(get("/recipe/1/ingredient/new"))
@@ -104,9 +106,8 @@ public class IngredientControllerTest {
         IngredientCommand ingredientCommand = new IngredientCommand();
 
         //when
-        when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(ingredientCommand);
-        when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
-
+        when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(Mono.just(ingredientCommand));
+        when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
         //then
         mockMvc.perform(get("/recipe/1/ingredient/2/update"))
                 .andExpect(status().isOk())
@@ -123,7 +124,7 @@ public class IngredientControllerTest {
         command.setRecipeId("2");
 
         //when
-        when(ingredientService.saveIngredientCommand(any())).thenReturn(command);
+        when(ingredientService.saveIngredientCommand(any())).thenReturn(Mono.just(command));
 
         //then
         mockMvc.perform(post("/recipe/2/ingredient")

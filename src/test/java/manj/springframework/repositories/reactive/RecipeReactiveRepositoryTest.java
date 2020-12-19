@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import manj.springframework.domain.Recipe;
+import manj.springframework.domain.reactive.ReactiveRecipe;
 
 @RunWith(SpringRunner.class)
 @DataMongoTest
 public class RecipeReactiveRepositoryTest {
-	
+
 	@Autowired
 	RecipeReactiveRepository recipeReactiveRepository;
 
@@ -24,15 +24,15 @@ public class RecipeReactiveRepositoryTest {
 	}
 
 	@Test
-    public void testRecipeSave() throws Exception {
-        Recipe recipe = new Recipe();
-        recipe.setDescription("Yummy");
+	public void testRecipeSave() throws Exception {
+		ReactiveRecipe recipe = new ReactiveRecipe();
+		recipe.setDescription("Yummy");
 
-        recipeReactiveRepository.save(recipe).block();
+		recipeReactiveRepository.save(recipe).block();
 
-        Long count = recipeReactiveRepository.count().block();
+		Long count = recipeReactiveRepository.count().block();
 
-        assertEquals(Long.valueOf(1L), count);
-    }
+		assertEquals(Long.valueOf(1L), count);
+	}
 
 }

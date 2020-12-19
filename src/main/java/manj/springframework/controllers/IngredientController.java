@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
  * Created by jt on 6/28/17.
  */
 @Slf4j
-@Controller
+//@Controller
 public class IngredientController {
 
     private final IngredientService ingredientService;
